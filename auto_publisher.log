@@ -71,3 +71,31 @@
 2025-05-18 21:56:06 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
 2025-05-18 21:56:06 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
 2025-05-18 21:56:06 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:17:00 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:17:00 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:17:00 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:17:06 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:17:06 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:17:06 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:17:10 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:17:10 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:17:10 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:17:11 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:17:11 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:17:11 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:20:54 - AutoPublisherLogger - INFO - load_state called. user_uid: RKezsoUkXnR8Alhg5zevKzgc9Eb2, current_profile_ids_from_run: []
+2025-05-18 22:20:54 - AutoPublisherLogger - INFO - Successfully loaded 1 site profiles from d:\wordpress post automation tool\profiles_config.json for CLI mode.
+2025-05-18 22:20:54 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'profile_1747554562'}
+2025-05-18 22:20:54 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:21:12 - AutoPublisherLogger - INFO - load_state called. user_uid: RKezsoUkXnR8Alhg5zevKzgc9Eb2, current_profile_ids_from_run: []
+2025-05-18 22:21:12 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'profile_1747554562'}
+2025-05-18 22:21:12 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:23:16 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
+2025-05-18 22:23:25 - AutoPublisherLogger - INFO - load_state called. user_uid: iROXMDJiuebQl9Jg4vvXohKea0C2, current_profile_ids_from_run: ['G2OYStSKm7PhTKI2zkbP']
+2025-05-18 22:23:25 - AutoPublisherLogger - INFO - Active profile IDs for state management: {'G2OYStSKm7PhTKI2zkbP'}
+2025-05-18 22:23:25 - AutoPublisherLogger - INFO - Loaded state from d:\wordpress post automation tool\wordpress_publisher_state_v11.pkl
