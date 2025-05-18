@@ -1,0 +1,433 @@
+{% extends "_base.html" %}
+
+{% block title %}Run Automation Dashboard{% endblock %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Styles specific to run_automation_page.html - Move to style.css */
+        .page-header { margin-bottom: 25px; padding-bottom:15px; border-bottom: 1px solid #eee; }
+        .page-header h1 { margin-bottom: 5px;}
+        .page-header .text-muted { font-size: 1rem; color: #6c757d; }
+
+        .automation-dashboard-container {
+            max-width: 1300px; /* Wider for landscape */
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .daily-cap-info-runner {
+            background-color: #e9f5fd; /* Light blue */
+            border-left: 5px solid #007bff; /* Primary blue */
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+            color: #004085; /* Darker blue text */
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .profile-run-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+            overflow: hidden;
+        }
+
+        .profile-run-header {
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Purple/Blue Gradient */
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .profile-run-header input[type="checkbox"] {
+            margin-right: 18px;
+            transform: scale(1.4);
+            cursor: pointer;
+            accent-color: #ffffff; /* Style checkbox color */
+        }
+        .profile-run-header label { /* For checkbox label */
+            font-weight: 600;
+            font-size: 1.3em;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        .profile-run-header label i { margin-right: 10px; }
+
+        .profile-run-body {
+            display: flex; /* Side-by-side layout for config and logs */
+            flex-wrap: wrap; /* Wrap on smaller screens */
+            padding: 25px;
+            gap: 30px;
+        }
+
+        .profile-run-config {
+            flex: 2; /* Config takes more space */
+            min-width: 350px;
+        }
+        .profile-run-config h4, .profile-run-logs h4 {
+            font-size: 1.15em;
+            color: #343a40;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #764ba2; /* Accent color from gradient */
+        }
+        .profile-run-config h4 i, .profile-run-logs h4 i { margin-right: 8px; }
+
+
+        .ticker-input-choice { margin-bottom: 20px; }
+        .ticker-input-choice label { margin-right: 15px; font-size: 0.95em; cursor: pointer;}
+        .ticker-input-choice input[type="radio"] { margin-right: 5px; vertical-align: middle; }
+
+        .file-upload-section, .manual-ticker-section {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+            margin-top: 10px;
+        }
+        .uploaded-file-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background-color: #e9f5ff;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .uploaded-file-info .file-name { color: #0056b3; font-weight: 500;}
+        .uploaded-file-info .remove-file-btn {
+            background: none; border: none; color: #dc3545; cursor: pointer; font-size: 1.1em;
+        }
+        
+        .ticker-status-table-container {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .ticker-status-table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+        .ticker-status-table th, .ticker-status-table td {
+            padding: 8px 10px; text-align: left; border-bottom: 1px solid #e9ecef;
+        }
+        .ticker-status-table th { background-color: #f1f3f5; font-weight: 600; color: #495057; }
+        .ticker-status-table td.status-published { color: #28a745; font-weight: 500;}
+        .ticker-status-table td.status-not-published { color: #6c757d; }
+
+        .profile-run-logs {
+            flex: 3; /* Logs take more space */
+            min-width: 400px;
+        }
+        .log-console-output { /* Re-using class from previous design */
+            background-color: #1e1e1e; /* Darker console */
+            color: #d4d4d4;
+            font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em; /* Slightly larger for readability */
+            padding: 20px;
+            border-radius: 8px;
+            height: 250px; /* Increased height */
+            overflow-y: auto;
+            border: 1px solid #333;
+            line-height: 1.6;
+        }
+        .log-console-output .log-entry {
+            margin-bottom: 7px;
+            padding-bottom: 7px;
+            border-bottom: 1px dashed #444;
+            display: flex; /* For icon alignment */
+            align-items: flex-start;
+        }
+        .log-console-output .log-entry:last-child { border-bottom: none; }
+        .log-entry .log-icon { margin-right: 10px; font-size: 1.1em; min-width: 20px; text-align: center; }
+        .log-entry .log-success .log-icon { color: #4CAF50; } /* Bright Green */
+        .log-entry .log-failure .log-icon { color: #F44336; } /* Bright Red */
+        .log-entry .log-skipped .log-icon { color: #2196F3; } /* Bright Blue */
+        .log-entry .log-unknown .log-icon { color: #FFC107; } /* Amber */
+        .log-entry .log-details .log-ticker { font-weight: bold; color: #9CDCFE; }
+        .log-entry .log-details .log-message { color: #C5C8C6; display: block; margin-top: 2px;}
+        .log-entry .log-details .log-timestamp { color: #6A9955; font-style: italic; font-size: 0.9em; margin-left: 5px; }
+
+
+        .btn-execute-runs { /* Main submit button */
+            background: linear-gradient(135deg, #17a2b8, #117a8b); /* Teal gradient */
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.15em;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: block;
+            width: fit-content;
+            margin: 40px auto 30px auto;
+            box-shadow: 0 5px 20px rgba(23, 162, 184, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-execute-runs:hover {
+            background: linear-gradient(135deg, #117a8b, #0e616f);
+            box-shadow: 0 7px 25px rgba(23, 162, 184, 0.4);
+            transform: translateY(-2px);
+        }
+        .btn-execute-runs i { margin-right: 12px; }
+        
+        /* Form group styling for consistency */
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 0.9em; color: #495057;}
+        .form-control-sm { height: calc(1.5em + .5rem + 2px); padding: .25rem .5rem; font-size: .875rem; line-height: 1.5; border-radius: .2rem;}
+        .form-text { font-size: 0.8em; color: #6c757d; }
+        textarea.form-control-sm { min-height: 80px; }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-cogs"></i> Automation Run Control</h1>
+    <p class="text-muted">Configure and launch automated tasks for your WordPress profiles.</p>
+</div>
+
+<div class="automation-dashboard-container">
+    {% if user_site_profiles and user_site_profiles|length > 0 %}
+        <div class="daily-cap-info-runner">
+            <i class="fas fa-tachometer-alt"></i> Global Daily Post Cap (per site): 
+            <strong>{{ absolute_max_posts_cap if absolute_max_posts_cap is not none else 'N/A' }}</strong>.
+            Today's Counts ({{ last_run_date_for_counts if last_run_date_for_counts else 'N/A' }}):
+        </div>
+
+        <form action="{{ url_for('run_automation_now') }}" method="POST" enctype="multipart/form-data" id="automationRunForm">
+            {% for profile in user_site_profiles %}
+            <div class="profile-run-card" data-profile-id="{{ profile.profile_id }}">
+                <div class="profile-run-header">
+                    <input type="checkbox" id="run_profile_{{ profile.profile_id }}" name="run_profile_ids[]" value="{{ profile.profile_id }}">
+                    <label for="run_profile_{{ profile.profile_id }}">
+                       <i class="fas fa-bullseye"></i> {{ profile.profile_name }}
+                    </label>
+                </div>
+                <div class="profile-run-body">
+                    <div class="profile-run-config">
+                        <h4><i class="fas fa-sliders-h"></i> Run Settings</h4>
+                        <p style="font-size: 0.9em; color: #6c757d; margin-bottom:15px;">
+                            Target Site: <a href="{{ profile.site_url }}" target="_blank" rel="noopener noreferrer">{{ profile.site_url }}</a>
+                        </p>
+                        <p>
+                            <span class="detail-label">Posts Today:</span> 
+                            <strong>{{ posts_today_by_profile.get(profile.profile_id, 0) }}</strong> / 
+                            {{ absolute_max_posts_cap if absolute_max_posts_cap is not none else 'N/A' }}
+                        </p>
+                        <div class="form-group">
+                            <label for="posts_{{ profile.profile_id }}">Posts for this Run:</label>
+                            {% set current_posts = posts_today_by_profile.get(profile.profile_id, 0) | int(0) %}
+                            {% set cap = absolute_max_posts_cap | int(-1) %}
+                            {% set max_for_run = (cap - current_posts) if cap != -1 else 100 %}
+                            <input type="number" class="form-control form-control-sm" id="posts_{{ profile.profile_id }}" name="posts_for_profile_{{ profile.profile_id }}" value="1" min="0" 
+                                   max="{{ max_for_run if max_for_run > 0 else 0 }}">
+                        </div>
+
+                        <div class="ticker-input-choice">
+                            <strong style="display: block; margin-bottom: 8px;">Ticker Source:</strong>
+                            <label>
+                                <input type="radio" name="ticker_source_{{ profile.profile_id }}" value="file" checked 
+                                       onchange="toggleTickerInput('{{ profile.profile_id }}', 'file')"> Upload File
+                            </label>
+                            <label>
+                                <input type="radio" name="ticker_source_{{ profile.profile_id }}" value="manual"
+                                       onchange="toggleTickerInput('{{ profile.profile_id }}', 'manual')"> Enter Manually
+                            </label>
+                        </div>
+
+                        <div class="file-upload-section" id="file_upload_section_{{ profile.profile_id }}">
+                            <div class="form-group">
+                                <label for="ticker_file_{{ profile.profile_id }}">Upload Ticker Sheet (Excel/CSV):</label>
+                                <input type="file" class="form-control form-control-sm ticker-file-input" 
+                                       id="ticker_file_{{ profile.profile_id }}" 
+                                       name="ticker_file_{{ profile.profile_id }}" 
+                                       accept=".xlsx,.xls,.csv"
+                                       data-profile-id="{{ profile.profile_id }}">
+                            </div>
+                            <div class="uploaded-file-info" id="uploaded_file_info_{{ profile.profile_id }}" style="display: none;">
+                                <span class="file-icon"><i class="fas fa-file-alt"></i></span>
+                                <span class="file-name"></span>
+                                <button type="button" class="remove-file-btn" title="Remove file"><i class="fas fa-times-circle"></i></button>
+                            </div>
+                            <div class="ticker-status-table-container" id="ticker_table_container_{{ profile.profile_id }}" style="display:none;">
+                                <table class="ticker-status-table">
+                                    <thead><tr><th>Ticker</th><th>Status</th></tr></thead>
+                                    <tbody> </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="manual-ticker-section" id="manual_ticker_section_{{ profile.profile_id }}" style="display: none;">
+                            <div class="form-group">
+                                <label for="custom_tickers_{{ profile.profile_id }}">Enter Tickers (comma-separated):</label>
+                                <textarea class="form-control form-control-sm" id="custom_tickers_{{ profile.profile_id }}" name="custom_tickers_{{ profile.profile_id }}" rows="3" placeholder="e.g., AAPL, MSFT, GOOGL"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-run-logs">
+                        <h4><i class="fas fa-history"></i> Recent Activity Log (Today)</h4>
+                        <div class="log-console-output" id="log_console_{{ profile.profile_id }}">
+                            {% set processed_log = processed_tickers_log_map.get(profile.profile_id, []) %}
+                            {% if processed_log and processed_log|length > 0 %}
+                                {% for log_entry in processed_log | reverse | list %}
+                                    <div class="log-entry log-{{ log_entry.status }}">
+                                        <span class="log-icon">
+                                            {% if log_entry.status == 'success' %}<i class="fas fa-check-circle"></i>
+                                            {% elif log_entry.status == 'failure' %}<i class="fas fa-times-circle"></i>
+                                            {% elif log_entry.status in ['skipped', 'skipped_setup', 'skipped_limit', 'skipped_no_tickers'] %}<i class="fas fa-info-circle"></i>
+                                            {% else %}<i class="fas fa-question-circle"></i>
+                                            {% endif %}
+                                        </span>
+                                        <div class="log-details">
+                                            <span class="log-ticker">{{ log_entry.ticker }}</span>
+                                            <span class="log-message" title="{{ log_entry.message }}">{{ log_entry.message|truncate(80, True) }}</span>
+                                            <span class="log-timestamp">[{{ log_entry.timestamp.split(' ')[1].split('.')[0] if log_entry.timestamp and ' ' in log_entry.timestamp else log_entry.timestamp }}]</span>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="no-log" style="text-align: center; padding-top: 20px; color: #6c757d;">No processing activity recorded today.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn-execute-runs"><i class="fas fa-bolt"></i> Start Selected Automation Runs</button>
+        </form>
+    {% else %}
+        <div class="form-section-card text-center" style="max-width: 600px; margin: 40px auto; padding:30px;">
+            <p style="font-size: 1.15em; color:#495057;">You currently have no site profiles configured.</p>
+            <a href="{{ url_for('manage_site_profiles') }}" class="btn btn-primary" style="font-size: 1.05em; padding: 12px 25px; border-radius:25px;">
+                <i class="fas fa-plus-circle"></i> Add Your First Site Profile
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("Enhanced Automation Runner Page Script Loaded.");
+
+    // Function to toggle ticker input methods
+    window.toggleTickerInput = function(profileId, selectedMethod) {
+        const fileSection = document.getElementById(`file_upload_section_${profileId}`);
+        const manualSection = document.getElementById(`manual_ticker_section_${profileId}`);
+        const fileInput = document.getElementById(`ticker_file_${profileId}`);
+        const manualInput = document.getElementById(`custom_tickers_${profileId}`);
+
+        if (selectedMethod === 'file') {
+            if(fileSection) fileSection.style.display = 'block';
+            if(manualSection) manualSection.style.display = 'none';
+            if(manualInput) manualInput.value = ''; // Clear manual input if switching to file
+        } else if (selectedMethod === 'manual') {
+            if(fileSection) fileSection.style.display = 'none';
+            if(manualSection) manualSection.style.display = 'block';
+            if(fileInput) fileInput.value = ''; // Clear file input
+            const fileInfoDiv = document.getElementById(`uploaded_file_info_${profileId}`);
+            const tickerTableContainer = document.getElementById(`ticker_table_container_${profileId}`);
+            if(fileInfoDiv) fileInfoDiv.style.display = 'none';
+            if(tickerTableContainer) tickerTableContainer.style.display = 'none';
+        }
+    }
+
+    // Initialize default view for ticker input choices
+    document.querySelectorAll('.profile-run-card').forEach(card => {
+        const profileId = card.dataset.profileId;
+        if (profileId) {
+            // Default to 'file' upload being visible, manual hidden
+            toggleTickerInput(profileId, 'file'); 
+            // Or check saved preference if you implement that
+            const radios = document.getElementsByName(`ticker_source_${profileId}`);
+            radios.forEach(radio => {
+                if (radio.value === 'file') radio.checked = true; // Default check
+            });
+        }
+    });
+
+    // Handle file input change to display file info and parse tickers
+    document.querySelectorAll('.ticker-file-input').forEach(input => {
+        input.addEventListener('change', function(event) {
+            const profileId = this.dataset.profileId;
+            const fileInfoDiv = document.getElementById(`uploaded_file_info_${profileId}`);
+            const fileNameSpan = fileInfoDiv ? fileInfoDiv.querySelector('.file-name') : null;
+            const removeFileBtn = fileInfoDiv ? fileInfoDiv.querySelector('.remove-file-btn') : null;
+            const tickerTableContainer = document.getElementById(`ticker_table_container_${profileId}`);
+            const tickerTableBody = tickerTableContainer ? tickerTableContainer.querySelector('tbody') : null;
+
+            if (event.target.files && event.target.files[0]) {
+                const file = event.target.files[0];
+                if(fileNameSpan) fileNameSpan.textContent = file.name;
+                if(fileInfoDiv) fileInfoDiv.style.display = 'flex';
+                
+                if(removeFileBtn) {
+                    removeFileBtn.onclick = function() {
+                        input.value = ''; // Clear the file input
+                        fileInfoDiv.style.display = 'none';
+                        if(tickerTableContainer) tickerTableContainer.style.display = 'none';
+                        if(tickerTableBody) tickerTableBody.innerHTML = '';
+                    };
+                }
+
+                // --- Client-side Excel/CSV Parsing (Optional but very useful for UX) ---
+                // This requires a library like SheetJS (xlsx) or PapaParse (csv)
+                // For simplicity, this example won't implement full parsing here.
+                // If you add such a library, you'd parse 'file' here.
+                // Then, for each ticker, you'd call a (new) backend endpoint to get its status.
+                // For now, we'll just show a placeholder for the table.
+                if (tickerTableContainer && tickerTableBody) {
+                    tickerTableBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#6c757d; padding:10px;"><i>Ticker status preview will appear after backend processing or with client-side parsing.</i></td></tr>'; // Placeholder
+                    tickerTableContainer.style.display = 'block';
+                    
+                    // Example of how you might populate if you had client-side parsing AND a way to get status
+                    // const exampleTickers = ["AAPL", "MSFT", "GOOG"]; // From parsed file
+                    // populateTickerStatusTable(profileId, exampleTickers);
+                }
+                // Ensure manual ticker input is cleared
+                const manualInput = document.getElementById(`custom_tickers_${profileId}`);
+                if(manualInput) manualInput.value = '';
+
+            } else {
+                if(fileInfoDiv) fileInfoDiv.style.display = 'none';
+                if(tickerTableContainer) tickerTableContainer.style.display = 'none';
+                if(tickerTableBody) tickerTableBody.innerHTML = '';
+            }
+        });
+    });
+
+    // Function to populate ticker status table (example, needs backend integration for status)
+    // This would be more complex, involving AJAX calls to check status for each ticker
+    async function populateTickerStatusTable(profileId, tickers) {
+        const tickerTableBody = document.getElementById(`ticker_table_container_${profileId}`).querySelector('tbody');
+        if (!tickerTableBody) return;
+        tickerTableBody.innerHTML = ''; // Clear previous
+
+        // In a real scenario, you'd fetch status for each ticker from your backend
+        // For now, using a placeholder status
+        for (const ticker of tickers) {
+            // const statusResponse = await fetch(`/api/get-ticker-status?profile_id=${profileId}&ticker=${ticker}`);
+            // const statusData = await statusResponse.json();
+            // const statusText = statusData.isPublished ? `Published: ${statusData.date}` : "Not Published";
+            // const statusClass = statusData.isPublished ? "status-published" : "status-not-published";
+            
+            const statusText = "Status N/A (Client Preview)"; // Placeholder
+            const statusClass = "status-not-published";
+
+            const row = tickerTableBody.insertRow();
+            row.innerHTML = `<td>${ticker}</td><td class="${statusClass}">${statusText}</td>`;
+        }
+    }
+});
+</script>
+{% endblock %}

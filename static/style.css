@@ -1,0 +1,380 @@
+/* static/style.css */
+
+/* --- Variables (Merging :root from both files) --- */
+:root {
+    /* Primary colors from index.html */
+    --primary: #10ac84;
+    --secondary: #2e86de;
+    --dark: #2d3436; /* Used for header/footer */
+    --light: #f5f6fa; /* Main background */
+    /* Status colors from index.html */
+    --danger: #e74c3c;
+    --success: #27ae60;
+    --warning: #f39c12;
+    --info: #3498db;
+    /* Font from index.html */
+    --font-main: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    /* Accent color from old style.css, maybe useful */
+    --accent-old: #1a2b47; /* Renamed to avoid clash */
+}
+
+/* --- Global Resets & Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%; /* For sticky footer */
+    scroll-behavior: smooth; /* For anchor link scrolling */
+}
+
+body {
+    font-family: var(--font-main);
+    line-height: 1.6;
+    color: #333; /* Default text color from index.html */
+    background-color: var(--light); /* Background from index.html */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* For sticky footer */
+    font-size: 15px; /* Base font size from old style.css */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px; /* Max width from index.html */
+    margin: 0 auto;
+    padding: 0 15px; /* Padding from index.html */
+}
+
+/* --- Header Styles (Based on index.html) --- */
+header {
+    background-color: var(--dark); /* Header background from index.html */
+    padding: 1rem 0; /* Padding from index.html */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* High z-index */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Shadow from index.html */
+    color: #fff; /* Default text color for header */
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem; /* Size from index.html */
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--primary); /* Accent color for span from index.html */
+}
+
+.logo-icon {
+    margin-right: 0.5rem; /* Spacing from index.html */
+    color: var(--primary); /* Icon color */
+    display: flex; /* Ensure icon aligns */
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: 1.5rem; /* Spacing from index.html */
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    display: inline-flex; /* Align icon and text */
+    align-items: center;
+    gap: 0.4rem; /* Space between icon and text */
+    font-size: 0.95rem; /* Font size from old style.css */
+}
+
+.nav-links a:hover {
+    color: var(--primary); /* Hover color from index.html */
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    flex-grow: 1; /* Ensures it pushes footer down */
+}
+
+/* --- Buttons (Merging styles) --- */
+.btn {
+    padding: 0.6rem 1.2rem; /* Base padding */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex; /* For icon alignment */
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap; /* Prevent text wrap */
+    text-decoration: none; /* Remove underline if used on <a> tags */
+    font-size: 0.95rem; /* Consistent font size */
+}
+.btn i, .btn .spinner {
+    margin-right: 8px; /* Space between icon/spinner and text */
+}
+
+.btn-primary {
+    background-color: var(--primary); /* Primary button color */
+    color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background-color: #0e9b76; /* Darker primary on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add subtle shadow on hover */
+}
+
+/* Secondary button style (Example) */
+.btn-secondary {
+    background-color: #6c757d; /* Grey color */
+    color: white;
+}
+.btn-secondary:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+
+.btn:disabled {
+    background-color: #95a5a6; /* Disabled style from index.html */
+    color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none; /* Disable hover transform */
+    box-shadow: none; /* Disable hover shadow */
+}
+
+/* Spinner inside buttons */
+.btn .spinner {
+    width: 18px; /* Slightly smaller spinner */
+    height: 18px;
+    border-width: 3px;
+    margin: 0 8px 0 0; /* Keep spacing */
+    border-left-color: #fff; /* White spinner track */
+    display: inline-block;
+    vertical-align: middle;
+    animation: spin 1s linear infinite; /* Use spin animation */
+}
+
+/* --- Generic Section Styling (from index.html) --- */
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem; /* Consistent bottom margin */
+}
+.section-title h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--dark); /* Use dark color for titles */
+    position: relative;
+    display: inline-block; /* For underline positioning */
+}
+.section-title h2::after { /* Underline effect */
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary);
+}
+.section-title p {
+    font-size: 1.1rem;
+    color: #666; /* Subtitle color */
+    max-width: 650px; /* Limit width for readability */
+    margin: 0 auto;
+    opacity: 0.9; /* Slightly transparent */
+}
+
+
+/* --- Footer Styles (Based on index.html) --- */
+footer {
+    background-color: var(--dark); /* Match header */
+    color: #bbb; /* Lighter text color for footer */
+    padding: 4rem 0 1.5rem 0; /* Top padding from index.html, reduced bottom */
+    margin-top: auto; /* Pushes footer to bottom */
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Responsive columns */
+    gap: 2.5rem; /* Increased gap */
+    margin-bottom: 3rem; /* Spacing before copyright */
+}
+
+.footer-about {
+    grid-column: span 1; /* Default span */
+}
+@media (min-width: 768px) {
+    .footer-about {
+        grid-column: span 2; /* Span 2 columns on wider screens */
+        max-width: 450px; /* Limit width */
+    }
+}
+
+
+.footer-logo { /* Logo styling consistent with header */
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff; /* White base color */
+}
+
+.footer-logo span {
+    color: var(--primary); /* Primary accent color */
+}
+
+.footer-about p {
+    font-size: 0.9rem; /* Slightly smaller text */
+    opacity: 0.8;
+    line-height: 1.7; /* Improved line spacing */
+}
+/* Optional: Specific style for disclaimer text */
+.footer-about p i {
+    opacity: 0.7;
+    font-size: 0.85rem;
+}
+
+
+.footer-links h4 {
+    font-size: 1.1rem; /* Adjusted size */
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+    color: #fff; /* White headings */
+}
+
+.footer-links h4::after { /* Underline for headings */
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+.footer-links ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem; /* Spacing between links */
+}
+
+.footer-links a {
+    color: #bbb; /* Link color */
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+    color: var(--primary); /* Hover color */
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 1.5rem; /* Reduced padding */
+    margin-top: 2rem; /* Adjusted margin */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border */
+    color: rgba(255, 255, 255, 0.7); /* Slightly brighter copyright text */
+    font-size: 0.9rem;
+}
+
+
+/* --- Animations (from index.html) --- */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spin-step { /* For progress indicator */
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* --- Responsive Adjustments (incorporating rules from both files) --- */
+
+/* Tablets and Small Desktops */
+@media (max-width: 992px) {
+    body { font-size: 14px; }
+    header { padding: 0.8rem 0; } /* Adjust header padding */
+    .container { width: 95%; }
+    .section-title h2 { font-size: 2.2rem; } /* Adjust section titles */
+    .section-title p { font-size: 1rem; }
+    /* Footer adjustments */
+    .footer-grid { gap: 2rem; }
+    .footer-links h4 { font-size: 1rem; }
+
+    /* Responsive styles from stock-analysis-homepage.html's inline styles */
+     /* Hero adjustments handled by stock-analysis-homepage inline styles */
+     /* Process steps centering handled by stock-analysis-homepage inline styles */
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+    /* Hide desktop nav links */
+    .nav-links { display: none; }
+    /* Add styles for a hamburger menu toggle here if implemented */
+
+    .logo { font-size: 1.3rem; }
+    .section-title h2 { font-size: 2rem; }
+    .cta h2 { font-size: 2rem; }
+
+    /* Footer stacking */
+    .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
+    .footer-about { grid-column: span 1; max-width: none; margin: 0 auto 1.5rem auto; } /* Center about text */
+    .footer-links h4::after { left: 50%; transform: translateX(-50%); } /* Center underline */
+     /* Form and other mobile styles handled by stock-analysis-homepage inline styles */
+}
+
+/* Smaller Mobile Devices */
+@media (max-width: 480px) {
+    body { font-size: 13px; }
+    .section-title h2 { font-size: 1.8rem; }
+    .section-title p { font-size: 0.9rem; }
+    .cta h2 { font-size: 1.8rem; }
+    .cta p { font-size: 0.9rem; }
+    .btn { padding: 0.7rem 1.4rem; font-size: 0.9rem; } /* Ensure buttons are tappable */
+    .copyright { font-size: 0.85rem; }
+     /* Form stacking and other small mobile styles handled by stock-analysis-homepage inline styles */
+}
+

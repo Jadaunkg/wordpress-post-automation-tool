@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Report for {{ ticker | upper }}{% endblock %}
+
+{% block head_scripts %}
+    <style>
+        /* Container for the entire report view */
+        .report-viewer-container {
+            padding: 1rem 0; /* Remove horizontal padding, vertical padding optional */
+            background-color: #ffffff; /* White background for the content area */
+            overflow-x: hidden; /* Prevent horizontal scroll on main container */
+        }
+
+        /* Controls section */
+        .report-controls {
+            max-width: 1200px; /* Match report content width */
+            margin: 0 auto 1.5rem auto; /* Center controls, add bottom margin */
+            padding: 0.5rem 1rem; /* Add some padding inside controls */
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            flex-wrap: wrap; /* Allow items to wrap on small screens */
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem; /* Add gap between items */
+        }
+        .report-controls h2 {
+            margin: 0;
+            font-size: 1.6rem; /* Adjusted size */
+            color: #34495e;
+            flex-grow: 1; /* Allow title to take space */
+        }
+
+        /* Style for the back button */
+        .btn-back {
+            display: inline-block;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #fff;
+            background-color: #6c757d; /* Secondary color */
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap; /* Prevent button text wrapping */
+        }
+        .btn-back:hover {
+            background-color: #5a6268;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Loading message style */
+        .loading-message {
+            text-align: center;
+            padding: 4rem 1rem;
+            font-size: 1.2rem;
+            color: #6c757d;
+        }
+        .error-message {
+            text-align: center;
+            padding: 4rem 1rem;
+            font-size: 1.1rem;
+            color: #dc3545;
+            font-weight: 500;
+        }
+        /* Iframe container */
+        #report-content-area {
+             /* Removed min-height: 100vh; height determined by JS */
+             width: 100%;
+             overflow: hidden; /* Hide overflow for the area itself */
+        }
+        /* Iframe style */
+        #report-iframe {
+            display: block;
+            width: 100%;
+             /* Start height at 0, JS will set it */
+            height: 0;
+            border: none;
+            /* overflow: hidden; */ /* Allow internal scroll if absolutely needed, but goal is to prevent */
+            visibility: hidden; /* Hide until loaded */
+            transition: height 0.1s ease-out; /* Smooth height transition */
+        }
+
+        @media (max-width: 768px) {
+            .report-controls h2 {
+                font-size: 1.4rem;
+                text-align: center;
+                width: 100%; /* Full width title on mobile */
+                margin-bottom: 0.5rem;
+            }
+             .report-controls {
+                justify-content: center; /* Center button */
+             }
+        }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="report-viewer-container">
+    <div class="report-controls">
+        <h2>Analysis Report: {{ ticker | upper }}</h2>
+        <a href="{{ url_for('index') }}" class="btn-back">Generate New Report</a>
+    </div>
+
+    <div id="report-content-area">
+        <p class="loading-message">Loading report content...</p>
+        <iframe id="report-iframe" title="Stock Analysis Report for {{ ticker | upper }}"></iframe>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const iframe = document.getElementById('report-iframe');
+        const loadingMessage = document.querySelector('.loading-message');
+        const reportArea = document.getElementById('report-content-area');
+        const reportUrl = "{{ report_url }}";
+
+        let resizeTimer;
+
+        function resizePlotlyPlots() {
+            try {
+                const plotlyInstance = iframe.contentWindow.Plotly;
+                if (plotlyInstance && typeof plotlyInstance.Plots !== 'undefined' && typeof plotlyInstance.Plots.resize === 'function') {
+                    const plotDivs = iframe.contentWindow.document.querySelectorAll('.plotly-graph-div');
+                    if (plotDivs.length > 0) {
+                        // console.log(`Found ${plotDivs.length} Plotly divs. Triggering resize.`);
+                        plotDivs.forEach(div => {
+                            try {
+                                if (div.offsetParent !== null) {
+                                    plotlyInstance.Plots.resize(div);
+                                }
+                            } catch (resizeError) {
+                                // console.error('Error resizing individual plot div:', resizeError, div);
+                            }
+                        });
+                        // console.log('Plotly resize attempt finished.');
+                    }
+                }
+            } catch (error) {
+                if (error.name !== 'SecurityError') {
+                     console.error('Error accessing iframe content or Plotly for resize:', error);
+                }
+            }
+        }
+
+        // --- UPDATED HEIGHT ADJUSTMENT ---
+        function adjustIframeHeight() {
+             try {
+                // Ensure contentWindow and document are accessible
+                if (!iframe.contentWindow || !iframe.contentWindow.document || !iframe.contentWindow.document.body) {
+                    console.warn("Iframe content not fully accessible yet for height adjustment.");
+                    return;
+                }
+                const iframeDoc = iframe.contentWindow.document;
+                // Use scrollHeight of the body within the iframe for a more reliable content height
+                const contentHeight = iframeDoc.body.scrollHeight;
+
+                if (contentHeight > 0) {
+                    iframe.style.height = contentHeight + 'px';
+                    // console.log(`Adjusted iframe height to: ${contentHeight}px`);
+                } else {
+                    // Fallback if scrollHeight is 0 (e.g., during load)
+                    iframe.style.height = '100vh';
+                }
+             } catch(error) {
+                 if (error.name !== 'SecurityError') {
+                     console.warn('Could not adjust iframe height:', error);
+                 }
+                 iframe.style.height = '120vh'; // Fallback height on error
+             }
+        }
+        // --- END UPDATED HEIGHT ADJUSTMENT ---
+
+
+        if (reportUrl && reportUrl !== 'None' && reportUrl.trim() !== '') {
+            iframe.src = reportUrl;
+
+            iframe.onload = function() {
+                loadingMessage.style.display = 'none';
+                iframe.style.visibility = 'visible'; // Make iframe visible only after load
+
+                // Initial resize and height adjustment attempt
+                // Multiple attempts might be needed as content renders
+                let attempts = 0;
+                const maxAttempts = 5;
+                function attemptAdjustments() {
+                    resizePlotlyPlots();
+                    adjustIframeHeight();
+                    attempts++;
+                    // Check if height is still very small, retry if needed
+                    if (iframe.clientHeight < 200 && attempts < maxAttempts) {
+                        setTimeout(attemptAdjustments, 300); // Retry after delay
+                    } else {
+                         // Add resize listeners after a likely successful adjustment
+                        try {
+                           // Use requestAnimationFrame for smoother resize handling
+                           let rafScheduled = false;
+                           const debouncedResize = () => {
+                               if (!rafScheduled) {
+                                   rafScheduled = true;
+                                   requestAnimationFrame(() => {
+                                       resizePlotlyPlots();
+                                       adjustIframeHeight();
+                                       rafScheduled = false;
+                                   });
+                               }
+                           };
+                           iframe.contentWindow.addEventListener('resize', debouncedResize);
+                           window.addEventListener('resize', debouncedResize); // Also listen to main window resize
+                        } catch(e) {
+                           console.warn("Could not add resize listener to iframe window.");
+                        }
+                    }
+                }
+                setTimeout(attemptAdjustments, 250); // Start first attempt after small delay
+
+            };
+
+            iframe.onerror = function() {
+                reportArea.innerHTML = '<p class="error-message">Error: Failed to load report content. The file might be missing or inaccessible.</p>';
+            };
+        } else {
+            reportArea.innerHTML = '<p class="error-message">Error: Invalid or missing report URL.</p>';
+        }
+    });
+</script>
+{% endblock %}

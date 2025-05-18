@@ -1,0 +1,2 @@
+firebase-service-account-key.json
+*.credentials.json # Or whatever pattern matches your key file

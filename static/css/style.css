@@ -1,0 +1,977 @@
+/* General Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-header {
+    background-color: #2c3e50; /* Dark blue-grey */
+    color: white;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.main-header h1 .fa-cogs {
+    margin-right: 10px;
+    color: #3498db; /* Brighter blue for icon */
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.main-footer {
+    background-color: #34495e; /* Slightly lighter dark blue-grey */
+    color: #bdc3c7; /* Light grey text */
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9em;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    color: #2c3e50;
+}
+
+h2 {
+    border-bottom: 2px solid #3498db; /* Blue accent */
+    padding-bottom: 0.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+}
+h2:first-child {
+    margin-top: 0;
+}
+
+
+/* Flash Messages */
+.flash-messages-container {
+    margin-bottom: 1.5rem;
+}
+.flash-message {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    font-size: 0.95em;
+}
+.flash-success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+.flash-error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.flash-info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
+.flash-warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+
+/* Form Styling */
+.form-section, .profile-card-form {
+    background-color: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9em;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="number"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db; /* Light grey border */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+select:focus {
+    border-color: #3498db; /* Blue focus */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+}
+
+select[multiple] {
+    min-height: 120px;
+}
+
+.form-text {
+    font-size: 0.8em;
+    color: #6c757d;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+
+/* Author Fieldsets */
+.author-fields {
+    border: 1px solid #e0e0e0;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 6px;
+    background-color: #f9fafb; /* Very light grey background */
+}
+.author-fields legend {
+    font-weight: 600;
+    color: #34495e;
+    padding: 0 0.5rem;
+    font-size: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+.remove-author-btn {
+    background: none;
+    border: none;
+    color: #e74c3c; /* Red for remove */
+    cursor: pointer;
+    padding: 0.3rem;
+    font-size: 0.9em;
+}
+.remove-author-btn:hover {
+    color: #c0392b; /* Darker red */
+}
+.remove-author-btn .fas {
+    pointer-events: none; /* So click goes to button */
+}
+
+
+/* Buttons */
+.btn, button, input[type="submit"] {
+    background-color: #3498db; /* Primary blue */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+.btn:hover, button:hover, input[type="submit"]:hover {
+    background-color: #2980b9; /* Darker blue */
+    transform: translateY(-1px);
+}
+.btn-secondary {
+    background-color: #7f8c8d; /* Grey */
+}
+.btn-secondary:hover {
+    background-color: #6c7a7b;
+}
+.btn-danger {
+    background-color: #e74c3c; /* Red */
+}
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+.btn-warning {
+    background-color: #f39c12; /* Orange */
+    color: white;
+}
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+.btn-group .btn {
+    margin-right: 0.5rem;
+}
+.btn-group .btn:last-child {
+    margin-right: 0;
+}
+
+#addAuthorBtn {
+    background-color: #2ecc71; /* Green for add */
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+#addAuthorBtn:hover {
+    background-color: #27ae60;
+}
+
+
+/* Profile Listing (Cards) */
+.profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+.profile-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease-in-out;
+}
+.profile-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.profile-card h3 {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 1.3em;
+    color: #3498db;
+    display: flex;
+    align-items: center;
+}
+.profile-card h3 .fa-globe, .profile-card h3 .fa-user-tie { /* Example Icons */
+    margin-right: 0.5rem;
+    color: #3498db;
+}
+.profile-card p {
+    margin-bottom: 0.5rem;
+    font-size: 0.9em;
+    color: #555;
+}
+.profile-card strong {
+    color: #34495e;
+}
+.profile-card .actions {
+    margin-top: auto; /* Pushes actions to the bottom of the card */
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    gap: 0.5rem; /* Space between buttons */
+}
+
+
+/* Automation Run Table */
+.automation-section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.automation-section th, .automation-section td {
+    border: 1px solid #e0e0e0;
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+.automation-section th {
+    background-color: #f8f9fa; /* Lighter grey for table header */
+    font-weight: 600;
+    color: #495057;
+}
+.automation-section tbody tr:nth-child(even) {
+    background-color: #fdfdfe;
+}
+.automation-section tbody tr:hover {
+    background-color: #f1f8ff; /* Light blue hover */
+}
+.automation-section input[type="number"] {
+    width: 70px;
+    padding: 0.4rem;
+}
+.automation-section input[type="checkbox"] {
+    width: auto;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.automation-section .btn-run-all {
+    margin-top: 1rem;
+}
+
+/* Daily Cap Info */
+.daily-cap-info {
+    font-size: 0.95em;
+    color: #555;
+    background-color: #e9ecef; /* Light grey background */
+    padding: 0.8rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 2rem;
+    border-left: 4px solid #3498db; /* Blue accent */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    .form-section, .profile-card-form {
+        padding: 1rem;
+    }
+    .profiles-grid {
+        grid-template-columns: 1fr; /* Stack cards on smaller screens */
+    }
+    .main-header h1 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Add to static/css/style.css if not already in _base.html's style block */
+
+/* Auth Page Specific Styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(80vh - 100px); /* Adjust based on header/footer height */
+    padding: 30px 15px; /* Responsive padding */
+    box-sizing: border-box;
+}
+
+.auth-card {
+    background-color: #ffffff;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+}
+
+.auth-card h2 {
+    font-size: 1.8em; /* Adjusted for balance */
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+.auth-card h2 i {
+    margin-right: 12px;
+    color: #6e8efb; /* Accent color */
+}
+
+.auth-card .form-group {
+    margin-bottom: 18px; /* Slightly reduced margin */
+    text-align: left;
+}
+
+.auth-card .form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #454545;
+    font-size: 0.9em;
+}
+
+.auth-card .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.auth-card .form-control:focus {
+    border-color: #6e8efb;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(110, 142, 251, 0.25);
+}
+
+.btn-auth {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 11px 20px; /* Adjusted padding */
+    border: none;
+    border-radius: 50px; /* More pill-like */
+    cursor: pointer;
+    font-size: 1em; /* Adjusted size */
+    font-weight: 600;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.25s ease;
+    margin-top: 10px; /* Added margin-top */
+}
+.btn-auth:hover {
+    opacity: 0.85;
+    box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+    transform: translateY(-1px);
+}
+.btn-auth:active {
+    transform: translateY(0px);
+    box-shadow: 0 2px 10px rgba(110, 142, 251, 0.3);
+}
+
+.auth-links {
+    margin-top: 20px;
+    font-size: 0.85em; /* Slightly smaller */
+    color: #6c757d; /* Softer color */
+}
+.auth-links a {
+    color: #6e8efb;
+    text-decoration: none;
+    font-weight: 500;
+}
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+/* General error message styling for Firebase auth errors */
+#auth-error-message {
+    color: #842029; /* Darker red for text */
+    background-color: #f8d7da; /* Light red background */
+    border: 1px solid #f5c2c7; /* Reddish border */
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px; /* Space below error */
+    font-size: 0.9em;
+    text-align: left; /* Ensure text is aligned left */
+    display: none; /* Hidden by default, shown by JS */
+}
+#auth-error-message ul { /* If error message contains a list */
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+/* Success message styling (e.g., for "Verification email sent") */
+#auth-success-message {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    text-align: left;
+    display: none; /* Hidden by default, shown by JS */
+}
+ /* manage_profiles.html specific styles - move to style.css */
+    .manage-profiles-container {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    }
+
+    .form-section-card, .profiles-list-card, .guidelines-card {
+        background-color: #ffffff;
+        padding: 25px 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+
+    .add-profile-section {
+        flex: 1; /* Takes up available space */
+        min-width: 400px; /* Minimum width before wrapping */
+    }
+
+    .existing-profiles-section {
+        flex: 2; /* Takes more space if available */
+        min-width: 450px;
+    }
+    
+    .form-section-card h2, .profiles-list-card h2, .guidelines-card h2 {
+        font-size: 1.6em;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #6e8efb;
+        padding-bottom: 10px;
+    }
+    .form-section-card h2 i, .profiles-list-card h2 i, .guidelines-card h2 i {
+        margin-right: 10px;
+        color: #6e8efb;
+    }
+    .form-section-card h3, .profiles-list-card h3 { /* Sub-headings like Writers */
+        font-size: 1.2em;
+        color: #444;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 7px;
+        color: #454545;
+        font-size: 0.9em;
+    }
+    .form-control, .form-select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.95em;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #6e8efb;
+        outline: none;
+        box-shadow: 0 0 0 0.2rem rgba(110, 142, 251, 0.25);
+    }
+    .form-select[multiple] {
+        min-height: 150px;
+    }
+    .form-text {
+        font-size: 0.8em;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    .btn-submit-profile {
+        background: linear-gradient(135deg, #6e8efb, #a777e3);
+        color: white;
+        padding: 11px 25px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition: all 0.25s ease;
+        margin-top: 10px;
+    }
+    .btn-submit-profile:hover {
+        opacity: 0.9;
+        box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4);
+    }
+    .btn-secondary-action {
+        background-color: #6c757d;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-right: 10px;
+        transition: background-color 0.2s ease;
+    }
+    .btn-secondary-action:hover {
+        background-color: #5a6268;
+    }
+    .btn-danger-action {
+        background-color: #e63946; color: white;
+    }
+    .btn-danger-action:hover {
+         background-color: #c12d38;
+    }
+
+
+    /* Writers Section */
+    .writer-entry {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #e9ecef;
+    }
+    .writer-entry .form-group { margin-bottom: 10px; }
+    .remove-writer-btn {
+        background-color: #fde2e4;
+        color: #941b0c;
+        border: 1px solid #f5c2c7;
+        padding: 5px 10px;
+        font-size: 0.8em;
+        border-radius: 4px;
+        cursor: pointer;
+        float: right; /* Position to the right */
+        margin-top: -5px; /* Adjust alignment */
+    }
+    .remove-writer-btn:hover { background-color: #e63946; color: white; }
+
+
+    /* Report Sections */
+    .report-sections-container {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px;
+        max-height: 250px; /* scrollable */
+        overflow-y: auto;
+        background-color: #fdfdfd;
+    }
+    .report-sections-container .checkbox-group {
+        display: block;
+        margin-bottom: 8px;
+    }
+    .report-sections-container .checkbox-group input[type="checkbox"] {
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+    .report-sections-container .checkbox-group label {
+        font-weight: normal;
+        font-size: 0.9em;
+        color: #333;
+        cursor: pointer;
+    }
+    .report-sections-controls {
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Existing Profiles List */
+    .profile-list-item {
+        background-color: #f8f9fa;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+    }
+    .profile-list-item h4 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #0056b3; /* Link-like color */
+        font-size: 1.25em;
+    }
+    .profile-list-item p {
+        font-size: 0.9em;
+        color: #555;
+        margin-bottom: 5px;
+        line-height: 1.5;
+    }
+    .profile-list-item strong { color: #333; }
+    .profile-list-item .actions {
+        margin-top: 15px;
+        text-align: right;
+    }
+    .profile-list-item .actions .btn { margin-left: 10px; }
+
+    /* WordPress Guidelines */
+    .guidelines-card ol {
+        padding-left: 20px;
+    }
+    .guidelines-card li {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+    .guidelines-card code {
+        background-color: #e9ecef;
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+        color: #c82333;
+    }
+
+    /* Automation Runner Inputs on this page */
+    .profile-card-on-manage { /* For the profile card when showing automation inputs */
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+    .profile-card-on-manage h3 {
+        margin-top: 0;
+        color: #6e8efb;
+    }
+    .automation-inputs label { font-weight: normal; font-size: 0.9em; }
+    .automation-inputs input[type="number"], 
+    .automation-inputs input[type="text"], 
+    .automation-inputs input[type="file"] {
+        margin-bottom: 10px;
+    }
+    .processing-log-section h4 { font-size: 1em; margin-top: 15px; color: #444; }
+    .processing-log-list {
+        list-style: none; padding-left: 0; font-size: 0.85em; max-height: 150px; overflow-y: auto;
+        background-color: #fff; border: 1px solid #eee; padding:10px; border-radius: 4px;
+    }
+    .processing-log-list li { margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px dashed #eee; }
+    .processing-log-list li:last-child { border-bottom: none; }
+    .log-success { color: #155724; }
+    .log-failure { color: #721c24; }
+    .log-skipped { color: #004085; }
+    .log-ticker { font-weight: bold; }
+    .log-timestamp { color: #777; font-size: 0.9em; margin-left: 5px;}
+
+    .daily-cap-info {
+        background-color: #e7f3fe;
+        border-left: 4px solid #6e8efb;
+        padding: 10px 15px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        color: #0c5460;
+    }
+
+    /* Ensure buttons in groups have some space */
+    .btn-group .btn + .btn {
+        margin-left: 10px;
+    }
+
+    /* ... (your existing styles) ... */
+
+/* User Profile Page Specific Styles */
+.user-profile-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.user-profile-container .page-title {
+    text-align: left;
+    margin-bottom: 2rem;
+    font-size: 2em;
+    color: #333;
+    border-bottom: none;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.profile-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensures padding and borders are contained */
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-card .card-header {
+    background-color: #f8f9fa; /* Light grey background for header */
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e9ecef; /* Light border */
+}
+
+.profile-card .card-header h3 {
+    margin: 0;
+    font-size: 1.25em;
+    color: #343a40; /* Darker text for header */
+}
+
+.profile-card .card-header h3 .fas {
+    margin-right: 0.75rem;
+    color: #007bff; /* Primary blue for icons */
+}
+
+
+.profile-card .card-body {
+    padding: 1.5rem;
+    flex-grow: 1; /* Allows card body to expand */
+}
+
+.profile-card .card-body p {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+    color: #495057; /* Slightly lighter text for body */
+}
+
+.profile-card .card-body p strong {
+    color: #212529; /* Darker text for strong elements */
+}
+
+.profile-card .text-muted.small {
+    font-size: 0.85em;
+    color: #6c757d !important; /* Ensure text-muted takes precedence */
+}
+
+.quick-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-links-list li {
+    margin-bottom: 0.75rem;
+}
+
+.quick-links-list li:last-child {
+    margin-bottom: 0;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 1em;
+}
+
+.btn-primary.btn-block {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-primary.btn-block:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.btn-success.btn-block {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-success.btn-block:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-danger.btn-block {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+.btn-danger.btn-block:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+
+/* Responsive adjustments for profile page if needed */
+@media (max-width: 768px) {
+    .profile-grid {
+        grid-template-columns: 1fr; /* Stack cards on smaller screens */
+    }
+    .user-profile-container .page-title {
+        font-size: 1.8em;
+    }
+}
+
+/* Ensure general button styles don't conflict too much or adjust as needed */
+.profile-card .btn {
+    display: flex; /* For icon alignment */
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-card .btn .fas {
+    margin-right: 8px; /* Space between icon and text in buttons */
+}
+
+/* ... (your existing styles) ... */
+
+/* Password Visibility Toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    padding-right: 40px; /* Make space for the icon */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 1px; 
+    top: 1px;
+    bottom: 1px;
+    border: none;
+    background: #f0f0f0; /* Light grey background */
+    padding: 0 12px;
+    cursor: pointer;
+    color: #333;
+    border-radius: 0 5px 5px 0; /* Match input field's right border radius */
+    line-height: 1; /* Align icon better */
+}
+
+.password-toggle:hover {
+    background: #e0e0e0;
+}
+
+.password-toggle .fas {
+    font-size: 0.9em;
+}
+
+
+/* Google Button Styling */
+.btn-google {
+    background-color: #ffffff;
+    color: #444;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    width: 100%;
+    text-transform: none; /* Google button usually not uppercase */
+    letter-spacing: normal;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-google:hover {
+    background-color: #f8f8f8;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-google .fab.fa-google {
+    color: #DB4437; /* Google's red */
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* Social Login Divider */
+.social-login-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    color: #aaa;
+}
+
+.social-login-divider span {
+    padding: 0 10px;
+    font-size: 0.9em;
+}
+
+.social-login-divider::before,
+.social-login-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eee;
+}
+
+/* Auth card adjustments for spinner and forgot password */
+.auth-card .btn-auth {
+    position: relative; /* For spinner positioning if needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Removed empty ruleset for .auth-card .btn-auth .fa-spinner */
+
+.auth-links {
+    margin-top: 15px; /* Adjusted margin */
+    font-size: 0.9em; /* Consistent size */
+}
+.auth-links:last-of-type { /* For forgot password or similar */
+    margin-top: 10px;
+}

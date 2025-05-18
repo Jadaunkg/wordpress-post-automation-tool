@@ -1,0 +1,225 @@
+{% extends "_base.html" %}
+
+{% block title %}Automation Portal - Streamline Your WordPress Workflow{% endblock %}
+
+{% block head_extra %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Homepage specific styles - can be moved to style.css */
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f7f6; /* Light background for the body */
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, #6e8efb, #a777e3); /* Updated gradient */
+        color: white;
+        padding: 80px 20px;
+        text-align: center;
+        border-bottom-left-radius: 150px; /* Curved bottom-left */
+    }
+
+    .hero-section h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-section p {
+        font-size: 1.4em;
+        margin-bottom: 30px;
+        font-weight: 300;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .cta-buttons .btn {
+        font-size: 1.1em;
+        padding: 12px 30px;
+        margin: 0 10px;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .cta-primary {
+        background-color: #ffffff;
+        color: #6e8efb;
+        border: 2px solid #ffffff;
+    }
+    .cta-primary:hover {
+        background-color: transparent;
+        color: #ffffff;
+    }
+
+    .cta-secondary {
+        background-color: transparent;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+    }
+    .cta-secondary:hover {
+        background-color: #ffffff;
+        color: #6e8efb;
+    }
+
+    .features-section {
+        padding: 70px 20px;
+        text-align: center;
+        background-color: #ffffff; /* White background for features */
+    }
+
+    .features-section h2 {
+        font-size: 2.5em;
+        margin-bottom: 50px;
+        color: #333;
+        font-weight: 600;
+        position: relative;
+        display: inline-block;
+    }
+    .features-section h2::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        background-color: #6e8efb; /* Accent color */
+        margin: 10px auto 0;
+        border-radius: 2px;
+    }
+
+    .features-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        background-color: #f9f9f9; /* Slightly off-white for cards */
+        border-radius: 15px;
+        padding: 30px;
+        width: calc(33.333% - 30px); /* Adjust for gap */
+        min-width: 280px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: left;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
+
+    .feature-card .icon {
+        font-size: 2.8em;
+        color: #6e8efb; /* Accent color */
+        margin-bottom: 20px;
+        display: block; /* Make icon a block to center if needed */
+        text-align: center;
+    }
+
+    .feature-card h3 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+        color: #444;
+        font-weight: 600;
+    }
+
+    .feature-card p {
+        font-size: 1em;
+        color: #666;
+        line-height: 1.7;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .feature-card {
+            width: calc(50% - 30px);
+        }
+    }
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 2.5em;
+        }
+        .hero-section p {
+            font-size: 1.2em;
+        }
+        .hero-section {
+             border-bottom-left-radius: 100px;
+        }
+        .feature-card {
+            width: 100%;
+            max-width: 450px; /* Max width for single column cards */
+        }
+    }
+    @media (max-width: 576px) {
+        .cta-buttons .btn {
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+        }
+         .hero-section {
+             border-bottom-left-radius: 70px;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<main class="homepage-main">
+    <section class="hero-section">
+        <h1>Automate Your WordPress Empire</h1>
+        <p>Focus on creating, not on manual posting. Our tool streamlines your WordPress workflow, saving you time and effort.</p>
+        <div class="cta-buttons">
+            {% if not is_user_logged_in %}
+                <a href="{{ url_for('login') }}" class="btn cta-primary">Get Started</a>
+                <a href="{{ url_for('register') }}" class="btn cta-secondary">Sign Up Free</a>
+            {% else %}
+                <a href="{{ url_for('manage_site_profiles') }}" class="btn cta-primary">Go to Dashboard</a>
+                <a href="{{ url_for('user_profile_page') }}" class="btn cta-secondary">My Account</a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2>Why Choose Our Automation Tool?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="icon"><i class="fas fa-cogs"></i></span>
+                <h3>Effortless Automation</h3>
+                <p>Schedule and manage posts across multiple WordPress sites with just a few clicks. Set it and forget it!</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                <h3>Boost Productivity</h3>
+                <p>Free up valuable time by automating repetitive posting tasks. Focus on strategy and content creation.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon"><i class="fas fa-users-cog"></i></span>
+                <h3>User-Friendly Interface</h3>
+                <p>Easily manage your site profiles, authors, and posting schedules through an intuitive dashboard.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon"><i class="fas fa-cloud-upload-alt"></i></span>
+                <h3>Flexible Content Sourcing</h3>
+                <p>Utilize tickers from Google Sheets, custom lists, or file uploads to generate diverse content.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon"><i class="far fa-calendar-alt"></i></span>
+                <h3>Smart Scheduling</h3>
+                <p>Intelligent post scheduling with customizable gaps to maintain a natural posting rhythm.</p>
+            </div>
+            <div class="feature-card">
+                <span class="icon"><i class="fas fa-shield-alt"></i></span>
+                <h3>Secure & Reliable</h3>
+                <p>Built with security in mind, ensuring your site credentials and data are handled safely.</p>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

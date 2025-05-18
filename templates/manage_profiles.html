@@ -1,0 +1,348 @@
+{% extends "_base.html" %}
+
+{% block title %}Site Profile Dashboard{% endblock %}
+
+{% block head_extra %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {# Add specific styles here or ensure they are in style.css #}
+    <style>
+        .page-header { margin-bottom: 25px; padding-bottom:15px; border-bottom: 1px solid #eee; }
+        .page-header h1 { margin-bottom: 5px;}
+        .page-header .text-muted { font-size: 1rem; }
+
+        .profile-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .profile-dashboard-header h1#dashboard-title { /* More specific ID for styling */
+            margin: 0;
+            font-size: 1.8em; /* Slightly smaller if it's a sub-header */
+            color: #333;
+        }
+         .profile-dashboard-header h1#dashboard-title i { color: #6e8efb; margin-right:10px; }
+
+
+        .btn-toggle-add-form {
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(110, 142, 251, 0.2);
+        }
+        .btn-toggle-add-form:hover {
+            opacity: 0.9;
+            box-shadow: 0 6px 20px rgba(110, 142, 251, 0.3);
+            transform: translateY(-2px);
+        }
+        .btn-toggle-add-form i { margin-right: 8px; }
+
+        #addProfileFormContainer {
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.07);
+        }
+        #addProfileFormContainer h2 {
+            font-size: 1.6em; color: #333; margin-top: 0; margin-bottom: 25px;
+            border-bottom: 2px solid #6e8efb; padding-bottom: 10px;
+        }
+         #addProfileFormContainer h2 i { color: #6e8efb; margin-right:10px; }
+
+
+        .existing-profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .profile-display-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .profile-display-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .profile-card-header {
+            background: linear-gradient(135deg, #6e8efb, #8b70f1);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .profile-card-header h3 { margin: 0; font-size: 1.25em; font-weight: 600; }
+        .profile-card-header h3 i { margin-right: 8px; }
+        .profile-card-header .actions .btn { /* Generalizing button styling */
+            background-color: rgba(255,255,255,0.15);
+            color: white; border: 1px solid rgba(255,255,255,0.4);
+            padding: 6px 12px; font-size: 0.85em; border-radius: 20px;
+            transition: background-color 0.2s ease;
+        }
+        .profile-card-header .actions .btn:hover { background-color: rgba(255,255,255,0.25); }
+        .profile-card-header .actions .btn-danger-action {
+            background-color: #dc3545; border-color: #dc3545;
+        }
+        .profile-card-header .actions .btn-danger-action:hover { background-color: #c82333; }
+        .profile-card-header .actions form { margin-left: 8px; }
+
+
+        .profile-card-body { padding: 20px; flex-grow: 1; font-size: 0.9rem;}
+        .profile-card-body p { margin-bottom: 10px; line-height: 1.6; color: #454F5B;}
+        .profile-card-body strong, .profile-card-body .detail-label { color: #161C24; font-weight: 500;}
+        .profile-card-body .detail-label { display: inline-block; min-width: 110px; }
+        
+        .profile-card-body .section-list { list-style: none; padding-left: 0; margin-top: 5px; margin-left: 110px; }
+        .profile-card-body .section-list li {
+            background-color: #e7f3fe; color: #0c5460;
+            padding: 4px 10px; border-radius: 15px;
+            margin-bottom: 5px; font-size: 0.8em;
+            display: inline-block; margin-right: 5px;
+            border: 1px solid #b8daff;
+        }
+        .profile-card-body .writers-list { margin-left: 110px; } /* Consistency */
+
+
+        .profile-card-footer { background-color: #f9fafb; padding: 15px 20px; border-top: 1px solid #e7e9ec; }
+        .profile-card-footer h4 { margin-top: 0; margin-bottom: 8px; font-size: 0.95em; color: #333D47; font-weight: 600; }
+        .processing-log-list-display {
+            list-style: none; padding: 10px; font-size: 0.85em; max-height: 120px; overflow-y: auto;
+            background-color: #fff; border: 1px solid #dee2e6; border-radius: 6px;
+        }
+        .processing-log-list-display li { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dotted #e9ecef; }
+        .processing-log-list-display li:last-child { border-bottom: none; }
+        .log-success .fa-check-circle { color: #28a745; }
+        .log-failure .fa-times-circle { color: #dc3545; }
+        .log-skipped .fa-info-circle { color: #17a2b8; }
+        .log-ticker { font-weight: 500; color: #212529; }
+        .log-timestamp { color: #6c757d; font-size: 0.9em; margin-left: 5px;}
+
+        .no-profiles-message {
+            text-align: center; padding: 50px 20px; background-color: #fff;
+            border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        .no-profiles-message p { font-size: 1.15em; margin-bottom: 15px; color: #454F5B;}
+        .no-profiles-message .fa-info-circle { color: #6e8efb; margin-bottom:20px; }
+
+        /* Re-styling from previous for form elements - ensure these are in style.css if not here */
+        .form-section-card h3 { font-size: 1.2em; color: #444; margin-top: 20px; margin-bottom: 15px; }
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 7px; color: #454545; font-size: 0.9em;}
+        .form-control, .form-select { width: 100%; padding: 10px 14px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 0.95em; transition: border-color 0.2s ease, box-shadow 0.2s ease;}
+        .form-control:focus, .form-select:focus { border-color: #6e8efb; outline: none; box-shadow: 0 0 0 0.2rem rgba(110, 142, 251, 0.25);}
+        .btn-secondary-action { background-color: #6c757d; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; margin-right: 10px; transition: background-color 0.2s ease;}
+        .btn-secondary-action:hover { background-color: #5a6268;}
+        .report-sections-container { border: 1px solid #ddd; border-radius: 6px; padding: 15px; max-height: 200px; overflow-y: auto; background-color: #fdfdfd; margin-bottom:15px;}
+        .report-sections-container .checkbox-group { display: block; margin-bottom: 8px; }
+        .report-sections-container .checkbox-group input[type="checkbox"] { margin-right: 8px; vertical-align: middle;}
+        .report-sections-container .checkbox-group label { font-weight: normal; font-size: 0.9em; color: #333; cursor: pointer;}
+        .report-sections-controls { margin-top: 10px; margin-bottom: 10px; }
+        .writer-entry { background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e9ecef;}
+        .remove-writer-btn { background-color: #fde2e4; color: #941b0c; border: 1px solid #f5c2c7; padding: 5px 10px; font-size: 0.8em; border-radius: 4px; cursor: pointer; float: right; margin-top: -5px;}
+        .remove-writer-btn:hover { background-color: #e63946; color: white; }
+        .btn-submit-profile { background: linear-gradient(135deg, #6e8efb, #a777e3); color: white; padding: 11px 25px; border: none; border-radius: 25px; cursor: pointer; font-size: 1em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.25s ease; margin-top: 15px;}
+        .btn-submit-profile:hover { opacity: 0.9; box-shadow: 0 5px 15px rgba(110, 142, 251, 0.4); }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header"> {# Consistent page header styling from _base.html or style.css #}
+    <h1><i class="fas fa-sitemap"></i> Site Profile Dashboard</h1>
+    <p class="text-muted">Manage your WordPress site configurations for automated posting.</p>
+</div>
+
+<div class="profile-dashboard-header">
+    <h1 id="dashboard-title"><i class="fas fa-stream"></i> Your Sites</h1>
+    <button id="toggleAddProfileFormBtn" class="btn-toggle-add-form"><i class="fas fa-plus-circle"></i> Add New Site Profile</button>
+</div>
+
+{# Section 1: Add New Site Profile (Initially Hidden) - Placed above the list for better flow when shown #}
+<div id="addProfileFormContainer" style="display: none;"> {# Initially hidden #}
+    <section class="form-section-card"> {# Re-using card style #}
+        <h2><i class="fas fa-plus-circle"></i> Add New Site Profile</h2>
+        <form action="{{ url_for('add_site_profile') }}" method="POST" id="addSiteProfileForm">
+            {# Form content from previous manage_profiles.html (profile name, site url, sheet name, etc.) #}
+            <div class="form-group">
+                <label for="profile_name_add">Profile Name:</label>
+                <input type="text" id="profile_name_add" name="profile_name" class="form-control" required placeholder="e.g., My Awesome Blog">
+            </div>
+            <div class="form-group">
+                <label for="site_url_add">Site URL:</label>
+                <input type="url" id="site_url_add" name="site_url" class="form-control" required placeholder="https://example.com">
+            </div>
+            <div class="form-group">
+                <label for="sheet_name_add">Default Google Sheet Name:</label>
+                <input type="text" id="sheet_name_add" name="sheet_name" class="form-control" placeholder="Sheet1 (Optional)">
+            </div>
+            <div class="form-group">
+                <label for="stockforecast_category_id_add">WordPress Category ID (for posts):</label>
+                <input type="text" id="stockforecast_category_id_add" name="stockforecast_category_id" class="form-control" placeholder="e.g., 6 (Optional)">
+            </div>
+            <div class="form-group">
+                <label for="min_scheduling_gap_minutes_add">Min Scheduling Gap (minutes):</label>
+                <input type="number" id="min_scheduling_gap_minutes_add" name="min_scheduling_gap_minutes" class="form-control" value="45" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="max_scheduling_gap_minutes_add">Max Scheduling Gap (minutes):</label>
+                <input type="number" id="max_scheduling_gap_minutes_add" name="max_scheduling_gap_minutes" class="form-control" value="68" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="env_prefix_for_feature_image_colors_add">.env Prefix for Image Colors:</label>
+                <input type="text" id="env_prefix_for_feature_image_colors_add" name="env_prefix_for_feature_image_colors" class="form-control" placeholder="e.g., MYSITE (Optional)">
+                <small class="form-text">If 'MYSITE', expects MYSITE_FEATURE_BG_COLOR in .env.</small>
+            </div>
+
+            <h3><i class="fas fa-users"></i> WordPress Writers</h3>
+            <div id="authorsContainerAdd">
+                </div>
+            <button type="button" id="addAuthorBtn" class="btn-secondary-action"><i class="fas fa-user-plus"></i> Add Another Writer</button>
+            <p class="form-text">At least one writer is required. <a href="#wp-guidelines" class="smooth-scroll">Need help with User ID or App Password?</a></p>
+
+            <h3><i class="fas fa-tasks"></i> Report Sections to Include</h3>
+            <div class="report-sections-controls">
+                <button type="button" id="selectAllSectionsAdd" class="btn-secondary-action btn-sm">Select All</button>
+                <button type="button" id="unselectAllSectionsAdd" class="btn-secondary-action btn-sm">Unselect All</button>
+            </div>
+            <div class="report-sections-container" id="reportSectionsAddContainer">
+                {% for section_key in all_report_sections %}
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="add_section_{{ section_key }}" name="report_sections_to_include[]" value="{{ section_key }}" checked>
+                        <label for="add_section_{{ section_key }}">{{ section_key.replace("_", " ").title() }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="btn-group" style="margin-top: 20px;">
+                <button type="submit" class="btn-submit-profile"><i class="fas fa-save"></i> Add Profile</button>
+                <button type="button" id="cancelAddProfileBtn" class="btn-secondary-action" style="background-color: #6c757d; color:white;">Cancel</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+{# Section 2: Display Existing Site Profiles #}
+{% if profiles and profiles|length > 0 %}
+    <div class="existing-profiles-grid">
+        {% for profile in profiles %}
+        <div class="profile-display-card">
+            <div class="profile-card-header">
+                <h3><i class="fas fa-globe-americas"></i> {{ profile.profile_name }}</h3>
+                <div class="actions btn-group">
+                    <a href="{{ url_for('edit_site_profile', profile_id_from_firestore=profile.profile_id) }}" class="btn btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                    <form action="{{ url_for('delete_site_profile', profile_id_to_delete=profile.profile_id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-sm btn-danger-action" onclick="return confirm('Are you sure you want to delete profile \'{{ profile.profile_name|escape }}\'? This cannot be undone.');"><i class="fas fa-trash"></i> Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="profile-card-body">
+                <p><span class="detail-label">Site URL:</span> <a href="{{ profile.site_url }}" target="_blank" rel="noopener noreferrer">{{ profile.site_url }}</a></p>
+                <p><span class="detail-label">Writers:</span> {{ profile.authors|length if profile.authors else 0 }}</p>
+                
+                {% if profile.report_sections_to_include and profile.report_sections_to_include|length > 0 %}
+                    <p><span class="detail-label">Active Sections:</span></p>
+                    <ul class="section-list">
+                    {% for section in profile.report_sections_to_include[:4] %} {# Show first 4 sections #}
+                        <li>{{ section.replace("_", " ").title() }}</li>
+                    {% endfor %}
+                    {% if profile.report_sections_to_include|length > 4 %}<li>+ {{ profile.report_sections_to_include|length - 4 }} more</li>{% endif %}
+                    </ul>
+                {% else %}
+                    <p><span class="detail-label">Active Sections:</span> All default</p>
+                {% endif %}
+                
+                <p style="margin-top:10px;"><span class="detail-label">Posts Today:</span> 
+                    <strong>{{ posts_today_by_profile.get(profile.profile_id, 0) }}</strong> / 
+                    <span title="Global daily cap per site">{{ absolute_max_posts_cap if absolute_max_posts_cap is not none else 'N/A' }}</span>
+                </p>
+                 <p>
+                    <small class="text-muted">
+                        <span class="detail-label">Last Updated:</span> {{ profile.last_updated_at|format_datetime if profile.last_updated_at else 'N/A' }}
+                    </small>
+                </p>
+            </div>
+            <div class="profile-card-footer">
+                <h4>Today's Log ({{ last_run_date_for_counts if last_run_date_for_counts else 'N/A' }}):</h4>
+                {% set processed_log = processed_tickers_log_map.get(profile.profile_id, []) %}
+                {% if processed_log and processed_log|length > 0 %}
+                    <ul class="processing-log-list-display">
+                        {% for log_entry in processed_log | reverse | list %}
+                            <li>
+                                {% if log_entry.status == 'success' %}<i class="fas fa-check-circle text-success" title="Success"></i>
+                                {% elif log_entry.status == 'failure' %}<i class="fas fa-times-circle text-danger" title="Failure"></i>
+                                {% elif log_entry.status in ['skipped', 'skipped_setup', 'skipped_limit', 'skipped_no_tickers'] %}<i class="fas fa-info-circle text-info" title="Skipped: {{ log_entry.status|replace('_', ' ')|title }}"></i>
+                                {% else %}<i class="fas fa-question-circle text-muted" title="Unknown status"></i>
+                                {% endif %}
+                                <span class="log-ticker">{{ log_entry.ticker }}</span> -
+                                <span class="log-message" title="{{ log_entry.message }}">{{ log_entry.message|truncate(60, True) }}</span>
+                                <span class="log-timestamp"> ({{ log_entry.timestamp.split(' ')[1].split('.')[0] if log_entry.timestamp and ' ' in log_entry.timestamp else log_entry.timestamp }})</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="font-size:0.9em; color:#6c757d; text-align:center; padding:10px 0;">No processing activity recorded today.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="no-profiles-message">
+        <p><i class="fas fa-folder-open fa-3x" style="color: #6e8efb; margin-bottom:15px;"></i></p>
+        <p>No site profiles have been configured yet.</p>
+        <p>Click the "Add New Site Profile" button above to create your first one!</p>
+    </div>
+{% endif %}
+
+{# Section 3: WordPress Guidelines (kept on this page for easy reference) #}
+<div id="wp-guidelines" class="guidelines-card">
+    <h2><i class="fab fa-wordpress-simple"></i> WordPress Connection Guidelines</h2>
+    <p>For each writer, you'll need their WordPress User ID and an Application Password from the target WordPress site.</p>
+    <h3>How to Find WordPress User ID:</h3>
+    <ol>
+        <li>Log in to your WordPress admin dashboard.</li>
+        <li>Go to <strong>Users &rarr; All Users</strong>.</li>
+        <li>Hover over a username. The link in your browser's status bar will show <code>user_id=X</code>. Or, click "Edit" for that user; the URL in your address bar will show the <code>user_id</code>. This number <code>X</code> is the User ID.</li>
+    </ol>
+    <h3>How to Generate a WordPress Application Password:</h3>
+    <ol>
+        <li>Log in as the WordPress user who will be posting.</li>
+        <li>Go to <strong>Users &rarr; Profile</strong>.</li>
+        <li>Scroll to the "Application Passwords" section. (If not visible, REST API might be disabled or blocked by a plugin).</li>
+        <li>Enter a name for this application (e.g., "MySite Automation") and click "Add New Application Password".</li>
+        <li>A new password will be generated (e.g., <code>xxxx xxxx xxxx xxxx</code>). <strong>Copy this password immediately and save it. You will not see it again.</strong></li>
+        <li>Use this generated password in the "Application Password" field here. <em>Do not use your main WordPress login password.</em></li>
+    </ol>
+    <p><small><strong>Security Tip:</strong> Consider creating a dedicated WordPress user with an "Editor" or "Author" role for automation, rather than using an Administrator account.</small></p>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+    {# main.js should be loaded from _base.html and contain initializeAuthorManagement and other shared functions.
+       The DOMContentLoaded listener in main.js will take care of calling:
+       initializeAuthorManagement('authorsContainerAdd', 'addAuthorBtn', [], 'add');
+       And setting up report section checkbox controls for the "Add" form.
+       It will also set up the toggle for the add profile form.
+    #}
+{% endblock %}
