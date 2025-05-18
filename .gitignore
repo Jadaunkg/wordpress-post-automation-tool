@@ -1,2 +1,5 @@
 firebase-service-account-key.json
 *.credentials.json # Or whatever pattern matches your key file
+.env
+.new_env
+*.env
